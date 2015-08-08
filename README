@@ -1,0 +1,11 @@
+gwfp - a git-based web-application fingerprinter
+
+Uses git to look at resources on the web, such as .js/.css/.ico/.html/.txt etc.
+to figure out if those exist as static files in the git repository of open
+source web application/CMS frameworks.
+
+It then checks the timestamps on the commits on when those files were introduced
+and possibly modified in the repository in order to gauge how old the installed
+software is.
+
+
