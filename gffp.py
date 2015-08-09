@@ -1,4 +1,17 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python2
+# unfortunately, python3 is not recommended because of 
+# Traceback (most recent call last):
+#   File "./gffp.py", line 50, in <module>
+#     matches_by_time = sorted(find_commits(r, b), key=lambda c: c.committed_date)
+#   File "./gffp.py", line 19, in find_commits
+#     if b in c.tree.traverse():
+#   File "/usr/local/lib/python3.4/dist-packages/gitdb/util.py", line 237, in __getattr__
+#     self._set_cache_(attr)
+#   File "/usr/local/lib/python3.4/dist-packages/git/objects/commit.py", line 138, in _set_cache_
+#     self._deserialize(BytesIO(stream.read()))
+#   File "/usr/local/lib/python3.4/dist-packages/git/objects/commit.py", line 448, in _deserialize
+#     while next_line.startswith(' '):
+# TypeError: startswith first arg must be bytes or a tuple of bytes, not str
 
 import git
 import git.repo.fun
