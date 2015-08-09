@@ -20,17 +20,30 @@ import datetime
 import sys
 import glob
 import os
+from progressbar import ProgressBar
 
 DEBUG = False
 
 # find commits in repository r which contain the blob b
-def find_commits(r, b):
+def find_commits(r, b, master_branch_or_others):
 	matching_commits = []
 	for branch in r.branches:
-		for c in ([branch.commit] + list(branch.commit.iter_parents())):
-			if DEBUG: print("Checking " + c.name_rev)
-			if b in c.tree.traverse():
-				matching_commits.append(c)
+		if (master_branch_or_others and branch.name == 'master') or (not master_branch_or_others and branch.name != 'master'):
+			print("      - checking branch " + branch.name)
+			commits = [branch.commit] + list(branch.commit.iter_parents())
+			progress = ProgressBar(maxval=len(commits))
+			i = 0
+			for c in commits:
+				i = i + 1	
+				if DEBUG: print("Checking " + c.name_rev)
+				progress.update(i)
+				if b in c.tree.traverse():
+					matching_commits.append(c)
+				else:
+					# stop if matching_commits has more than one entry and we no longer match
+					if len(matching_commits) > 0:
+						progress.update(len(commits))
+						break
 	return matching_commits
 
 # return a string representation of the committed_date of a commit
@@ -60,10 +73,13 @@ for (f, h) in zip(files, hashes_to_check):
 		try:
 			b = git.repo.fun.name_to_object(r, h)
 			print("    - found in repo, let's look for commits.")
-			matches_by_time = sorted(find_commits(r, b), key=lambda c: c.committed_date)
+			matches_by_time = find_commits(r, b, True)
+			if len(matches_by_time) == 0:
+				matches_by_time = find_commits(r, b, False)
+			matches_by_time = sorted(matches_by_time, key=lambda c: c.committed_date)
 			latest = matches_by_time[-1]
 			first  = matches_by_time[0]
-			print("      - first commit: " + first.name_rev + " at " + commit_datestr(first))
-			print("      - latest commit: " + latest.name_rev + " at " + commit_datestr(latest))
+			print("      - first commit:  " + commit_datestr(first) + " " + first.name_rev)
+			print("      - latest commit: " + commit_datestr(latest) + " " + latest.name_rev)
 		except gitdb.exc.BadObject: # does not exist in repo
 			pass
