@@ -1,11 +1,26 @@
-gwfp - a git-based web-application fingerprinter
+gffp - a git-based file fingerprinter
 
-Uses git to look at resources on the web, such as .js/.css/.ico/.html/.txt etc.
-to figure out if those exist as static files in the git repository of open
-source web application/CMS frameworks.
+Uses git to look at files obtained from somewhere and check whether they
+are present in any of a location git repository.
+
+This can be used for example with resources on the web, such as
+.js/.css/.ico/.html/.txt etc. to figure out if those exist as static files in
+the git repository of open source web application/CMS frameworks.
 
 It then checks the timestamps on the commits on when those files were introduced
 and possibly modified in the repository in order to gauge how old the installed
 software is.
 
+Run as follows:
+./gffp.py base-dir file-to-check [file-to-check2 ...]
 
+This iterates over all git repository found directly below base-dir and checks
+whether the file-to-check was ever present in its exact form in one of the
+git repositories (fuzzy checking is beyond the scope of this tool for now).
+It then goes through the commits and checks when the file first appeared in the
+repository and when it "disappeared" (i.e. was superseded by a newer version,
+if at all). Multiple files can be specified and a combined timeline will be
+presented then, too.
+
+This should give you a good estimate on which version of a product a website
+is running and whether it has any known vulnerabilities.
