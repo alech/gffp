@@ -1,0 +1,12 @@
+# cf. https://code.google.com/p/mustache-security/
+https://github.com/yyx990803/vue
+https://github.com/angular/angular.js
+https://github.com/bitovi/canjs
+https://github.com/jashkenas/underscore
+https://github.com/knockout/knockout
+https://github.com/emberjs/ember.js
+https://github.com/polymer/polymer
+https://github.com/ractivejs/ractive
+https://github.com/jquery/jquery
+https://github.com/borismoore/jsrender
+https://github.com/telerik/kendo-ui-core
